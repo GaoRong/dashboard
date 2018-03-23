@@ -26,6 +26,7 @@ type synchronizerManager struct {
 }
 
 // Secret implements synchronizer manager. See SynchronizerManager interface for more information.
+//create an secretSynchronizer
 func (self *synchronizerManager) Secret(namespace, name string) syncApi.Synchronizer {
 	return &secretSynchronizer{
 		namespace:      namespace,
@@ -36,6 +37,7 @@ func (self *synchronizerManager) Secret(namespace, name string) syncApi.Synchron
 }
 
 // NewSynchronizerManager creates new instance of SynchronizerManager.
+//synchronizerManger is private type, and return a public interface
 func NewSynchronizerManager(client kubernetes.Interface) syncApi.SynchronizerManager {
 	return &synchronizerManager{client: client}
 }

@@ -104,6 +104,7 @@ func (self *overwatch) monitorRegistrationEvents() {
 func (self *overwatch) monitorSynchronizerStatus(synchronizer syncApi.Synchronizer) {
 	stopCh := make(chan struct{})
 	name := synchronizer.Name()
+	//Until run until the stopCh closed
 	go wait.Until(func() {
 		select {
 		case err := <-synchronizer.Error():

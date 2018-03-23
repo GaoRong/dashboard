@@ -21,10 +21,11 @@ import (
 )
 
 // Implements watch.Interface
+//EventChan is used for transfor the event
 type PollWatcher struct {
-	eventChan chan watch.Event
-	stopped   bool
-	sync.Mutex
+	eventChan  chan watch.Event
+	stopped    bool
+	sync.Mutex //need't add name, just embeding struct
 }
 
 // Stop stops poll watcher and closes event channel.

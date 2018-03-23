@@ -27,6 +27,7 @@ import (
 )
 
 // SettingsManager is a structure containing all settings manager members.
+//just handle kubernetes-dashboard-settings config map
 type SettingsManager struct {
 	settings      map[string]api.Settings
 	rawSettings   map[string]string

@@ -16,6 +16,9 @@ package args
 
 import "net"
 
+//global variable that holder the flag, all the get/set function is public, so other package can access directly
+//just a warper to global variable Holder
+//builder just used at build, other case is just access the Holder
 var builder = &holderBuilder{holder: Holder}
 
 // Used to build argument holder structure. It is private to make sure that only 1 instance can be created

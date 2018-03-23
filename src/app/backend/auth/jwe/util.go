@@ -24,6 +24,7 @@ import (
 // Credits to David W. https://stackoverflow.com/a/44688503
 
 // ExportRSAKeyOrDie exports rsa key object to a private/public strings. In case of fail panic is called.
+//just reverse function of ParseRSAKey blow
 func ExportRSAKeyOrDie(privKey *rsa.PrivateKey) (priv, pub string) {
 	privkey_bytes := x509.MarshalPKCS1PrivateKey(privKey)
 	privkey_pem := pem.EncodeToMemory(

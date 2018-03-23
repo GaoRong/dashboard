@@ -54,7 +54,7 @@ func (self *secretSynchronizer) Name() string {
 	return fmt.Sprintf("%s-%s", self.name, self.namespace)
 }
 
-// Start implements Synchronizer interface. See Synchronizer for more information.
+// Start implements SynchronizerEvent interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Start() {
 	self.errChan = make(chan error)
 	watcher, err := self.watch(self.namespace, self.name)
@@ -75,6 +75,7 @@ func (self *secretSynchronizer) Start() {
 					self.errChan <- fmt.Errorf("%s watch ended with timeout", self.Name())
 					return
 				}
+				//call registed function
 				if err := self.handleEvent(ev); err != nil {
 					self.errChan <- err
 					return

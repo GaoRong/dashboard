@@ -26,8 +26,10 @@ import (
 // IntegrationManager is responsible for management of all integrated applications.
 type IntegrationManager interface {
 	// IntegrationsGetter is responsible for listing all supported integrations.
+	//used for getStat function
 	IntegrationsGetter
 	// GetState returns state of integration based on its' id.
+	//just for handler use
 	GetState(id api.IntegrationID) (*api.IntegrationState, error)
 	// Metric returns metric manager that is responsible for management of metric integrations.
 	Metric() metric.MetricManager

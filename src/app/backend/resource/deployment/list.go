@@ -126,6 +126,7 @@ func toDeploymentList(deployments []apps.Deployment, pods []v1.Pod, events []v1.
 	cachedResources := &metricapi.CachedResources{
 		Pods: pods,
 	}
+	//toCell function is transfer to a comparable object DataCell(which is an interface)
 	deploymentCells, metricPromises, filteredTotal := dataselect.GenericDataSelectWithFilterAndMetrics(
 		toCells(deployments), dsQuery, cachedResources, metricClient)
 	deployments = fromCells(deploymentCells)

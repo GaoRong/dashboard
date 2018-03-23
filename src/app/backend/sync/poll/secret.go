@@ -30,7 +30,7 @@ type SecretPoller struct {
 	name      string
 	namespace string
 	client    kubernetes.Interface
-	watcher   *PollWatcher
+	watcher   *PollWatcher //watcher is transfer, transfe data from poller to needer
 }
 
 // Poll new secret every 'interval' time and send it to watcher channel. See Poller for more information.
@@ -75,6 +75,6 @@ func NewSecretPoller(name, namespace string, client kubernetes.Interface) syncap
 		name:      name,
 		namespace: namespace,
 		client:    client,
-		watcher:   NewPollWatcher(),
+		watcher:   NewPollWatcher(), //watcher is transfer, transfe data from poller to needer, primaryly contain an channel
 	}
 }

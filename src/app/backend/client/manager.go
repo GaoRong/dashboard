@@ -73,6 +73,7 @@ type clientManager struct {
 // Client returns kubernetes client that is created based on authentication information extracted
 // from request. If request is nil then authentication will be skipped.
 func (self *clientManager) Client(req *restful.Request) (kubernetes.Interface, error) {
+	//every request must generate config object used by client
 	cfg, err := self.Config(req)
 	if err != nil {
 		return nil, err
@@ -117,6 +118,7 @@ func (self *clientManager) CanI(req *restful.Request, ssar *v1.SelfSubjectAccess
 // Config creates rest Config based on authentication information extracted from request.
 // Currently request header is only checked for existence of 'Authentication: BearerToken'
 func (self *clientManager) Config(req *restful.Request) (*rest.Config, error) {
+	//get authentication informatio form req and return cmdConfig
 	cmdConfig, err := self.ClientCmdConfig(req)
 	if err != nil {
 		return nil, err
@@ -127,6 +129,7 @@ func (self *clientManager) Config(req *restful.Request) (*rest.Config, error) {
 		return nil, err
 	}
 
+	//set the dashboard client config
 	self.initConfig(cfg)
 	return cfg, nil
 }
@@ -134,17 +137,20 @@ func (self *clientManager) Config(req *restful.Request) (*rest.Config, error) {
 // ClientCmdConfig creates ClientCmd Config based on authentication information extracted from request.
 // Currently request header is only checked for existence of 'Authentication: BearerToken'
 func (self *clientManager) ClientCmdConfig(req *restful.Request) (clientcmd.ClientConfig, error) {
+	//if req is nil the authInfo is nil, it only happend when first time use
 	authInfo, err := self.extractAuthInfo(req)
 	if err != nil {
 		return nil, err
 	}
 
+	//Unexpectly, get rest.Config from file or api-server is so easy
 	cfg, err := self.buildConfigFromFlags(self.apiserverHost, self.kubeConfigPath)
 	if err != nil {
 		return nil, err
 	}
 
 	// Use auth data provided in cfg if extracted auth info is nil
+	//when req is nil, also when init client by an insecure client
 	if authInfo == nil {
 		defaultAuthInfo := self.buildAuthInfoFromConfig(cfg)
 		authInfo = &defaultAuthInfo
@@ -177,6 +183,7 @@ func (self *clientManager) HasAccess(authInfo api.AuthInfo) error {
 		return err
 	}
 
+	//embedding function( trieve from Discover memeber)
 	_, err = client.ServerVersion()
 	return err
 }
@@ -275,6 +282,7 @@ func (self *clientManager) extractAuthInfo(req *restful.Request) (*api.AuthInfo,
 		return &api.AuthInfo{Token: token}, nil
 	}
 
+	//jweToken contain the authInto, token mangaer resposible for it
 	if self.tokenManager != nil && len(jweToken) > 0 {
 		return self.tokenManager.Decrypt(jweToken)
 	}
@@ -294,7 +302,7 @@ func (self *clientManager) extractTokenFromHeader(authHeader string) string {
 func (self *clientManager) init() {
 	self.initInClusterConfig()
 	self.initCSRFKey()
-	self.initInsecureClient()
+	self.initInsecureClient() //
 }
 
 // Initializes in-cluster config if apiserverHost and kubeConfigPath were not provided.
@@ -341,6 +349,7 @@ func (self *clientManager) initInsecureClient() {
 // Generates random csrf key
 func (self *clientManager) generateCSRFKey() {
 	bytes := make([]byte, 256)
+	//can also generate keyby ioutils.readAll(rand.Reader, bytes)
 	_, err := rand.Read(bytes)
 	if err != nil {
 		panic("Fatal error. Could not generate csrf key")

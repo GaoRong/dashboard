@@ -90,6 +90,7 @@ func main() {
 	}
 
 	clientManager := client.NewClientManager(args.Holder.GetKubeConfigFile(), args.Holder.GetApiServerHost())
+	//get the dashboard version, all of these are interface
 	versionInfo, err := clientManager.InsecureClient().Discovery().ServerVersion()
 	if err != nil {
 		handleFatalInitError(err)
@@ -173,6 +174,7 @@ func initAuthManager(clientManager clientapi.ClientManager) authApi.AuthManager 
 	insecureClient := clientManager.InsecureClient()
 
 	// Init default encryption key synchronizer
+	//factory design patten, both is interface, manager and synchronizer
 	synchronizerManager := sync.NewSynchronizerManager(insecureClient)
 	keySynchronizer := synchronizerManager.Secret(authApi.EncryptionKeyHolderNamespace, authApi.EncryptionKeyHolderName)
 

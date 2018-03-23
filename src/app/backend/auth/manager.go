@@ -86,6 +86,8 @@ func (self authManager) getAuthenticator(spec *authApi.LoginSpec) (authApi.Authe
 // Checks if user data extracted from provided AuthInfo structure is valid and user is correctly authenticated
 // by K8S apiserver.
 func (self authManager) healthCheck(authInfo api.AuthInfo) error {
+	//get version of k8s by client create by authinfo
+	//just test if authinfo is valid and do not care it's authrization
 	return self.clientManager.HasAccess(authInfo)
 }
 

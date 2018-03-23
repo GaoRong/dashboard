@@ -150,6 +150,7 @@ func (self *DataSelector) getMetrics(metricClient metricapi.MetricClient) (
 			continue
 		}
 
+		//called the DeploymentCell's GetResourceSelector, just copy deployment medadata to ResourceSelector object
 		selectors[i] = *metricDataCell.GetResourceSelector()
 	}
 
